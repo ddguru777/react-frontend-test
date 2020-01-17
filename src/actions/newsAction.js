@@ -25,6 +25,7 @@ const onLoadNews = () => {
       const news = [];
       const featuredNews = [];
 
+      // Parsiong json result from NYTimes API
       for (let i = 0; i < result.response.docs.length; i++) {
         const newsItem = {
           key: i,
@@ -42,9 +43,6 @@ const onLoadNews = () => {
           featuredNews.push(newsItem);
         }
       }
-
-      localStorage.setItem('news', JSON.stringify(news));
-      localStorage.setItem('news', JSON.stringify(featuredNews));
 
       dispatch(onLoadNewsSuccess(news, featuredNews));
 

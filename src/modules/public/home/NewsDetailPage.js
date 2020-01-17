@@ -10,6 +10,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
 // Components
+import ReactLoading from 'react-loading';
 import Header from '../../common/Header';
 
 // Actions
@@ -29,7 +30,13 @@ const NewsSection = styled.section`
   width: 100%;
 `;
 
-const styles = theme => ({
+const Loading = styled.section`
+  position: fixed;
+  left: 48%;
+  top: 48%;
+`;
+
+const styles = () => ({
   imageContent: {
     width: '100%',
     height: 'auto !important',
@@ -47,31 +54,37 @@ class NewsDetailPage extends Component {
   }
 
   render() {
-    const { newsList, history } = this.props;
+    const { newsList, isLoading, history } = this.props;
     const query = history.location.search.split('?')[1].trim();
     const classes = styles();
     return (
       <Container>
         <Header />
-        <Main>
-          <Grid container spacing={8}>
-            <Grid item xs>
-              {newsList.length > 0 && (
-                <NewsSection>
-                  <img
-                    className={classes.imageContent}
-                    alt="news-content"
-                    src={newsList[query].mainImage}
-                  />
-                  <Typography variant="display1" gutterBottom>
-                    {newsList[query].title}
-                  </Typography>
-                  <p>{newsList[query].summary}</p>
-                </NewsSection>
-              )}
+        {isLoading ? (
+          <Loading>
+            <ReactLoading type="bars" color="black" />
+          </Loading>
+        ) : (
+          <Main>
+            <Grid container spacing={8}>
+              <Grid item xs>
+                {newsList.length > 0 && (
+                  <NewsSection>
+                    <img
+                      className={classes.imageContent}
+                      alt="news-content"
+                      src={newsList[query].mainImage}
+                    />
+                    <Typography variant="display1" gutterBottom>
+                      {newsList[query].title}
+                    </Typography>
+                    <p>{newsList[query].summary}</p>
+                  </NewsSection>
+                )}
+              </Grid>
             </Grid>
-          </Grid>
-        </Main>
+          </Main>
+        )}
       </Container>
     );
   }
@@ -81,10 +94,12 @@ NewsDetailPage.propTypes = {
   history: PropTypes.object, // React Router Injected,
   newsList: PropTypes.array,
   getNews: PropTypes.func,
+  isLoading: PropTypes.bool,
 };
 
 const mapStateToProps = state => ({
   newsList: state.news.news,
+  isLoading: state.news.is_loading,
   pageNum: state.news.pageNum,
 });
 

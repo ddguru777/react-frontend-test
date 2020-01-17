@@ -6,7 +6,7 @@ import { withStyles } from '@material-ui/core/styles';
 // Component
 import NavBar from './NavBar';
 
-const styles = theme => ({
+const styles = () => ({
   header: {
     backgroundColor: '#000',
     paddingLeft: '15px',
